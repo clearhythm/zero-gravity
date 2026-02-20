@@ -148,15 +148,15 @@ examples/       Sample stamped documents
 cli.cjs         CLI tool
 ```
 
-## Status
-
-This is v0.1 — exploratory and open to revision. The `encoding` and `version` fields travel with every block, so parsers can handle format evolution gracefully.
-
-Full specification: [zero-gravity-0.1.md](spec/zero-gravity-0.1.md)
-
-## Future Direction
+## Future Directions
 
 - **Embedding manifests.** The `embed` field currently points to a single vector. Future versions could serve a manifest with vectors from multiple providers (OpenAI, Cohere, Voyage, etc.) so agents grab the representation matching their model.
 - **Script tag / sidecar.** Export the stamp as `<script type="application/zero-gravity">` for HTML-native consumption, or as a `.zg.json` sidecar file alongside the article.
 - **Native HTML.** If stamps become a web standard, the format could collapse to native meta elements. The stamp is the bootstrap — a format that works today, inside articles, without waiting for browser vendors.
 - **Discovery.** A registry of Zero Gravity-stamped articles, enabling semantic search across publishers.
+
+## Status
+
+This is v0.1 — exploratory and open to revision. The `encoding` and `version` fields travel with every block, so parsers can handle format evolution gracefully.
+
+Full specification: [zero-gravity-0.1.md](spec/zero-gravity-0.1.md)
