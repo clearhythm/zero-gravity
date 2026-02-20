@@ -1,0 +1,15 @@
+{
+  "name": "zerogravity",
+  "version": "0.1.0",
+  "description": "Zero Gravity — Semantic encoding for AI agents",
+  "scripts": {
+    "generate": "node cli.cjs generate",
+    "parse": "node cli.cjs parse",
+    "embed": "node cli.cjs embed"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.71.2",
+    "dotenv": "^16.6.1",
+    "openai": "^4.0.0"
+  }
+}
