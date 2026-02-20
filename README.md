@@ -46,17 +46,23 @@ An agent encountering this stamp can parse it for free, assess relevance from th
 
 ## How to Use It
 
-**Use the skill.** Add [`zero-gravity.md`](skill/zero-gravity.md) to your agent's context. Point it at an article. It generates the stamp. This works with any LLM.
+### Option 1: Use the Skill
 
-**Use the CLI.** Clone this repo, add your API key, and run:
+Just add [`zero-gravity.md`](skill/zero-gravity.md) to your agent's context. Point it at an article. Any LLM can generate a stamp.
+
+Boom. Done.
+
+### Option 2: Use the CLI
+
+If you plan to use Zero Gravity in a research project or generate stamps for an entire blog, this option will save you time.
+
+Just clone this repo, add your API key, and run:
 
 ```bash
 node cli.cjs generate --input article.md --stamp
 ```
 
-**Write it by hand.** The format is simple enough to author manually. Five fields. The hardest part is distilling good indexes — but that's the whole point.
-
-### CLI Commands
+#### CLI Commands
 
 ```bash
 # Generate full JSON + stamp from an article
@@ -69,7 +75,13 @@ node cli.cjs generate --input article.md --embed
 node cli.cjs parse --input file-with-stamp.md --json
 ```
 
-Generation requires an Anthropic API key. Embeddings require an OpenAI API key. Set `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` in a `.env` file.
+_Note: Generation requires an Anthropic API key. Embeddings require an OpenAI API key. Set `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` in a `.env` file._
+
+### Option 3: Write it by hand
+
+The format is simple enough to author manually. Five fields. The hardest part is distilling good indexes. But if you think you can do it better than AI, by all means go for it.
+
+This option is particularly good for people who like to use rotary phones (batteries not included).
 
 ## Formats
 
