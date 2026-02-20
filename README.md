@@ -1,14 +1,24 @@
 # Zero Gravity
 
-A lightweight semantic encoding for AI agents. Zero Gravity stamps let publishers declare what an article *means* — its intent, its key claims, its indexable fragments — so agents can parse meaning without processing full prose.
+A lightweight semantic encoding for AI agents.
 
-This is v0.1. Exploratory and open to revision.
+## Why
 
-## The Stamp
+Web content is optimized for humans. Prose is great for reading — and incredibly expensive for agents to parse. Every time an agent encounters an article, it does the same work: read the whole thing, figure out what it says, decide if it's relevant, maybe summarize it, maybe embed it. That's tokens. That's compute.
 
-A Zero Gravity stamp is a structured block that lives inside an article. Agents find it by regex, parse it for free, and decide whether the full article is worth reading.
+Now multiply that by every agent, every article, every day. The same distillation happening redundantly across millions of agents.
 
-```yaml
+What if the publisher did that work once?
+
+## What
+
+Zero Gravity is a structured semantic abstract that lives inside an article. It declares what the article *means* — its intent, its key claims, its indexable fragments — in a format agents can parse instantly and for free.
+
+The publisher distills the meaning once. Every agent that encounters the article benefits. Zero redundant compute.
+
+A Zero Gravity stamp looks like this:
+
+```
 🪐 Zero Gravity
 Semantic encoding for AI agents
 
@@ -26,21 +36,50 @@ indexes:
 ---END ZERO GRAVITY---
 ```
 
-### Fields
+Five fields. Three of them do the heavy lifting:
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `encoding` | yes | Always `"zero-gravity"` |
-| `version` | yes | Version string (`"0.1"`) |
-| `title` | yes | Article title |
-| `intent` | yes | What the article is trying to get you to think or do |
-| `indexes` | yes | 4-8 semantic fragments — key phrases, distilled claims, notable snippets |
+- **`intent`** — what the article is trying to get you to think or do. Not a summary — the core purpose.
+- **`indexes`** — 4-8 semantic fragments for vectorization. Key phrases, distilled claims, notable snippets. Unlike tags that categorize, indexes carry propositional content — what the article *argues*, what makes it *unique*, what's worth *remembering*.
+- **`encoding`** / **`version`** — a generic envelope, so the pattern can evolve and other encodings can reuse it.
 
-The `indexes` field is the signature innovation. Unlike tags that categorize, indexes carry propositional content — what the article *argues*, what makes it *unique*, what's worth *remembering*.
+An agent encountering this stamp can parse it for free, assess relevance from the indexes, and decide whether the full article is worth reading — without processing a single paragraph of prose.
 
-## Full JSON (Canonical Form)
+## How to Use It
 
-The generator produces a full JSON with extended semantic fields. The stamp is derived from a subset.
+**Use the skill.** Add [`zero-gravity.md`](skill/zero-gravity.md) to your agent's context. Point it at an article. It generates the stamp. This works with any LLM.
+
+**Use the CLI.** Clone this repo, add your API key, and run:
+
+```bash
+node cli.cjs generate --input article.md --stamp
+```
+
+**Write it by hand.** The format is simple enough to author manually. Five fields. The hardest part is distilling good indexes — but that's the whole point.
+
+### CLI Commands
+
+```bash
+# Generate full JSON + stamp from an article
+node cli.cjs generate --input article.md --stamp
+
+# Generate with embedding vector
+node cli.cjs generate --input article.md --embed
+
+# Parse an existing stamp from a document
+node cli.cjs parse --input file-with-stamp.md --json
+```
+
+Generation requires an Anthropic API key. Embeddings require an OpenAI API key. Set `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` in a `.env` file.
+
+## Formats
+
+### Stamp (inline)
+
+The stamp lives inside an article — Markdown, HTML, plain text. Agents find it by regex (`---BEGIN ZERO GRAVITY---`), parse the fields, and move on.
+
+### Full JSON (canonical)
+
+The generator produces a full JSON with extended semantic fields. The stamp is derived from a subset. The full JSON includes claims, relevance, stance, tags, relations, and an optional embedding vector.
 
 ```json
 {
@@ -49,39 +88,31 @@ The generator produces a full JSON with extended semantic fields. The stamp is d
   "id": "zero-gravity-v01",
   "title": "Zero Gravity — A Semantic Bootstrap for the Agentic Web",
   "intent": "proposal",
-  "relevance": "A meaning skeleton makes content indexable, embeddable, and retrievable without processing full prose",
+  "relevance": "A meaning skeleton makes content indexable without processing full prose",
   "claims": [
     "agents waste tokens on rhetorical glue",
     "meaning can be represented as claims and relations",
-    "a semantic skeleton is more useful than a compressed paragraph",
     "embedding the skeleton produces cleaner vectors than embedding the article"
   ],
   "indexes": [
     "Erik Burns",
     "semantic bootstrap for agents",
     "token gravity",
-    "publisher-declared intent layer",
     "agents need structure not prose",
     "meaning has bones"
   ],
   "stance": "exploratory",
-  "novelty": ["Zero Gravity microformat", "distill-then-embed pipeline"],
   "tags": ["semantic-compression", "agent-abstracts", "meaning-skeleton"],
   "relations": ["RAG", "argument-mapping", "structured-data"],
-  "audience": ["AI agents", "content publishers", "semantic web practitioners"],
   "embedding": {
     "model": "text-embedding-3-small",
     "dimensions": 1536,
-    "input_hash": "sha256-hex",
     "vector": [0.0123, -0.0456, "..."]
-  },
-  "created_at": "2026-02-18T12:00:00Z"
+  }
 }
 ```
 
-## HTML Embedding
-
-A stamp can be embedded in HTML as a script tag for structured discovery:
+### HTML (future)
 
 ```html
 <script type="application/zero-gravity">
@@ -89,71 +120,24 @@ A stamp can be embedded in HTML as a script tag for structured discovery:
   "encoding": "zero-gravity",
   "version": "0.1",
   "title": "Zero Gravity — A Semantic Bootstrap for the Agentic Web",
-  "intent": "Introduce a lightweight semantic declaration layer for reducing redundant agent embedding",
-  "indexes": [
-    "Erik Burns",
-    "semantic bootstrap for agents",
-    "token gravity",
-    "agents need structure not prose",
-    "meaning has bones"
-  ]
+  "intent": "Introduce a lightweight semantic declaration layer",
+  "indexes": ["Erik Burns", "semantic bootstrap for agents", "token gravity"]
 }
 </script>
 ```
 
-This is a future direction — the current focus is the inline stamp format.
-
-## How to Use It
-
-### Option 1: Use the skill
-
-Add [`zero-gravity.md`](skill/zero-gravity.md) to your agent's context. Point it at an article. It generates the stamp.
-
-### Option 2: Use the CLI
-
-```bash
-# Generate full JSON from an article
-node cli.cjs generate --input article.md
-
-# Generate and output a stamp
-node cli.cjs generate --input article.md --stamp
-
-# Generate with embedding
-node cli.cjs generate --input article.md --embed
-
-# Parse an existing stamp
-node cli.cjs parse --input file-with-stamp.md
-
-# Parse as JSON
-node cli.cjs parse --input file-with-stamp.md --json
-```
-
-Requires an Anthropic API key (for generation) and optionally an OpenAI API key (for embeddings). Set `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` in a `.env` file.
-
-### Option 3: Write it by hand
-
-The spec is simple enough to author manually. Five fields. The hardest part is distilling good `indexes` — but that's the whole point.
-
 ## Repo Structure
 
 ```
-spec/           Schema definition (zero-gravity-0.1.md)
+spec/           Schema and field definitions
 skill/          Portable agent skill for generating stamps
 src/            Parser, generator, embedder
 examples/       Sample stamped documents
 cli.cjs         CLI tool
 ```
 
-## Versioning
+## Status
 
-This is v0.1 — a starting point. The `encoding` and `version` fields travel with every block, so parsers can handle format evolution gracefully.
-
-Future directions:
-
-- **Embedding manifests** — vectors from multiple providers so agents grab the one matching their model
-- **Script tag / sidecar** — `<script type="application/zero-gravity">` for HTML-native consumption
-- **Discovery** — a registry of stamped articles for semantic search across publishers
-
-## Spec
+This is v0.1 — exploratory and open to revision. The `encoding` and `version` fields travel with every block, so parsers can handle format evolution gracefully.
 
 Full specification: [zero-gravity-0.1.md](spec/zero-gravity-0.1.md)
