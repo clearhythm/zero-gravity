@@ -24,7 +24,8 @@ function parseArgs(argv) {
     output: null,
     json: false,
     embed: false,
-    stamp: false
+    stamp: false,
+    manifest: null
   };
   let i = 2; // skip 'node' and script path
 
@@ -42,6 +43,8 @@ function parseArgs(argv) {
       args.embed = true;
     } else if (arg === '--stamp') {
       args.stamp = true;
+    } else if (arg === '--manifest' && argv[i + 1]) {
+      args.manifest = argv[++i];
     }
     i++;
   }
@@ -149,10 +152,14 @@ async function cmdGenerate(args) {
   // Output stamp if requested
   if (args.stamp) {
     const { formatStampWithHeader } = require('./src/parser.cjs');
+    const { DEFAULT_MODEL } = require('./src/generator.cjs');
     const stampFields = {
+      author: result.fields.author,
       title: result.fields.title,
       intent: result.fields.intent,
-      indexes: result.fields.indexes || []
+      metaindex: result.fields.metaindex || [],
+      model: DEFAULT_MODEL,
+      manifest: args.manifest || undefined
     };
 
     const stamp = formatStampWithHeader(stampFields);
@@ -267,6 +274,7 @@ function printHelp() {
     node cli.cjs generate --input article.md
     node cli.cjs generate --input article.md --embed
     node cli.cjs generate --input article.md --stamp
+    node cli.cjs generate --input article.md --stamp --manifest https://example.com/embed.json
     node cli.cjs generate --input article.md --output path/to/output.zg.json
 
   Parse:

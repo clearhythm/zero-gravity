@@ -19,30 +19,34 @@ The publisher distills the meaning once. Every agent that encounters the article
 A Zero Gravity stamp looks like this:
 
 ```
-🪐 Zero Gravity
-Semantic encoding for AI agents
+🪐 Zero Gravity Stamp
+Semantic pre-filtering for agents | learn more
 
 ---BEGIN ZERO GRAVITY---
 encoding: "zero-gravity"
 version: "0.1"
+author: "Erik Burns"
 title: "Zero Gravity — A Semantic Bootstrap for the Agentic Web"
 intent: "Introduce a lightweight semantic declaration layer for reducing redundant agent embedding"
-indexes:
+metaindex:
   - "Erik Burns"
   - "semantic bootstrap for agents"
   - "token gravity"
   - "agents need structure not prose"
   - "meaning has bones"
+model: "claude-sonnet-4-5"
 ---END ZERO GRAVITY---
 ```
 
-Five fields. Three of them do the heavy lifting:
+Three required fields do the heavy lifting:
 
 - **`intent`** — what the article is trying to get you to think or do. Not a summary — the core purpose.
-- **`indexes`** — 4-8 semantic fragments for vectorization. Key phrases, distilled claims, notable snippets. Unlike tags that categorize, indexes carry propositional content — what the article *argues*, what makes it *unique*, what's worth *remembering*.
+- **`metaindex`** — 4-8 semantic fragments for vectorization. Key phrases, distilled claims, notable snippets. Unlike tags that categorize, metaindex entries carry propositional content — what the article *argues*, what makes it *unique*, what's worth *remembering*.
 - **`encoding`** / **`version`** — a generic envelope, so the pattern can evolve and other encodings can reuse it.
 
-An agent encountering this stamp can parse it for free, assess relevance from the indexes, and decide whether the full article is worth reading — without processing a single paragraph of prose.
+Three optional fields add context: **`author`** (who wrote it), **`model`** (what generated the stamp), and **`manifest`** (URL to embeddings or other published resources).
+
+An agent encountering this stamp can parse it for free, assess relevance from the metaindex, and decide whether the full article is worth reading — without processing a single paragraph of prose.
 
 ## How to Use It
 
@@ -79,7 +83,7 @@ _Note: Generation requires an Anthropic API key. Embeddings require an OpenAI AP
 
 ### Option 3: Write it by hand
 
-The format is simple enough to author manually. Five fields. The hardest part is distilling good indexes. But if you think you can do it better than AI, by all means go for it.
+The format is simple enough to author manually. The hardest part is distilling a good metaindex. But if you think you can do it better than AI, by all means go for it.
 
 This option is particularly good for people who like to use rotary phones (batteries not included).
 
@@ -98,6 +102,7 @@ The generator produces a full JSON with extended semantic fields. The stamp is d
   "encoding": "zero-gravity",
   "version": "0.1",
   "id": "zero-gravity-v01",
+  "author": "Erik Burns",
   "title": "Zero Gravity — A Semantic Bootstrap for the Agentic Web",
   "intent": "proposal",
   "relevance": "A meaning skeleton makes content indexable without processing full prose",
@@ -106,7 +111,7 @@ The generator produces a full JSON with extended semantic fields. The stamp is d
     "meaning can be represented as claims and relations",
     "embedding the skeleton produces cleaner vectors than embedding the article"
   ],
-  "indexes": [
+  "metaindex": [
     "Erik Burns",
     "semantic bootstrap for agents",
     "token gravity",
@@ -131,9 +136,10 @@ The generator produces a full JSON with extended semantic fields. The stamp is d
 {
   "encoding": "zero-gravity",
   "version": "0.1",
+  "author": "Erik Burns",
   "title": "Zero Gravity — A Semantic Bootstrap for the Agentic Web",
   "intent": "Introduce a lightweight semantic declaration layer",
-  "indexes": ["Erik Burns", "semantic bootstrap for agents", "token gravity"]
+  "metaindex": ["Erik Burns", "semantic bootstrap for agents", "token gravity"]
 }
 </script>
 ```
@@ -150,7 +156,7 @@ cli.cjs         CLI tool
 
 ## Future Directions
 
-- **Embedding manifests.** The `embed` field currently points to a single vector. Future versions could serve a manifest with vectors from multiple providers (OpenAI, Cohere, Voyage, etc.) so agents grab the representation matching their model.
+- **Embedding manifests.** The `manifest` field currently points to a single embedding. Future versions could serve a manifest with vectors from multiple providers (OpenAI, Cohere, Voyage, etc.) so agents grab the representation matching their model.
 - **Script tag / sidecar.** Export the stamp as `<script type="application/zero-gravity">` for HTML-native consumption, or as a `.zg.json` sidecar file alongside the article.
 - **Native HTML.** If stamps become a web standard, the format could collapse to native meta elements. The stamp is the bootstrap — a format that works today, inside articles, without waiting for browser vendors.
 - **Discovery.** A registry of Zero Gravity-stamped articles, enabling semantic search across publishers.
