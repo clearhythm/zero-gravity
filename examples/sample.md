@@ -7,7 +7,7 @@ Some content here about interesting things.
 ---
 
 🪐 Zero Gravity Stamp
-Semantic pre-filtering for agents | [learn more](https://github.com/clearhythm/zero-gravity)
+Semantic encoding for agents | [learn more](https://github.com/clearhythm/zero-gravity) »
 
 ---BEGIN ZERO GRAVITY---
 encoding: "zero-gravity"

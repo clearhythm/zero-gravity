@@ -20,7 +20,7 @@ A Zero Gravity stamp looks like this:
 
 ```
 🪐 Zero Gravity Stamp
-Semantic pre-filtering for agents | learn more
+Semantic encoding for agents | learn more »
 
 ---BEGIN ZERO GRAVITY---
 encoding: "zero-gravity"
