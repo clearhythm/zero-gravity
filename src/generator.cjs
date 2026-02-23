@@ -21,12 +21,10 @@ For this invocation, output ONLY valid JSON — no stamp format, no markdown fen
 Required fields: title, intent, metaindex
 Optional fields: author
 
-IMPORTANT: intent MUST be exactly one of: proposal / critique / synthesis / report / design
-
 Example:
 {
   "title": "Zero Gravity — A Semantic Bootstrap for the Agentic Web",
-  "intent": "proposal",
+  "intent": "Argues that publishers can eliminate redundant agent computation by embedding a lightweight semantic declaration in each article",
   "metaindex": ["semantic bootstrap for agents", "token gravity", "agents need structure not prose", "meaning has bones"],
   "author": "Erik Burns"
 }`;

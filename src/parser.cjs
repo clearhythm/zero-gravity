@@ -14,8 +14,6 @@ const STAMP_REQUIRED_FIELDS = ['encoding', 'version', 'title', 'intent', 'metain
 // Full JSON required fields (from generator output)
 const JSON_REQUIRED_FIELDS = ['title', 'intent', 'metaindex'];
 
-// Controlled vocabularies
-const VALID_INTENTS = ['proposal', 'critique', 'synthesis', 'report', 'design'];
 
 /**
  * Extract a data block from text.
@@ -146,10 +144,6 @@ function validateFullJSON(json) {
     }
   }
 
-  if (json.intent && !VALID_INTENTS.includes(json.intent)) {
-    errors.push(`Invalid intent value: "${json.intent}". Must be one of: ${VALID_INTENTS.join(', ')}`);
-  }
-
   if (Array.isArray(json.metaindex)) {
     if (json.metaindex.length < 4) {
       errors.push(`metaindex should have at least 4 items (found ${json.metaindex.length})`);
@@ -252,6 +246,5 @@ module.exports = {
   formatStampWithHeader,
   ZG_BLOCK_REGEX,
   STAMP_REQUIRED_FIELDS,
-  JSON_REQUIRED_FIELDS,
-  VALID_INTENTS
+  JSON_REQUIRED_FIELDS
 };
