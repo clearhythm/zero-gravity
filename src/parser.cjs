@@ -233,12 +233,12 @@ function formatStamp(fields, version = '0.1') {
  * @returns {string}
  */
 function formatStampWithHeader(fields, infoUrl = 'https://github.com/clearhythm/zero-gravity', version = '0.1') {
-  const header = '🪐 Zero Gravity Stamp';
+  const header = '## 🪐 Zero Gravity Stamp';
   const tagline = `Semantic encoding for agents | [learn more](${infoUrl}) »`;
 
   const dataBlock = formatStamp(fields, version);
 
-  return `${header}\n${tagline}\n\n${dataBlock}`;
+  return `${header}\n${tagline}\n\n\`\`\`\n${dataBlock}\n\`\`\``;
 }
 
 module.exports = {

@@ -18,23 +18,23 @@ The publisher distills the meaning once. Every agent that encounters the article
 
 A Zero Gravity stamp looks like this:
 
-```
-🪐 Zero Gravity Stamp
+## 🪐 Zero Gravity Stamp
 Semantic encoding for agents | learn more »
 
+```
 ---BEGIN ZERO GRAVITY---
 encoding: "zero-gravity"
 version: "0.1"
 author: "Erik Burns"
 title: "Zero Gravity — A Semantic Bootstrap for the Agentic Web"
-intent: "Introduce a lightweight semantic declaration layer for reducing redundant agent embedding"
+intent: "proposal"
 metaindex:
   - "Erik Burns"
   - "semantic bootstrap for agents"
   - "token gravity"
   - "agents need structure not prose"
   - "meaning has bones"
-model: "claude-sonnet-4-5"
+model: "claude-sonnet-4-6"
 ---END ZERO GRAVITY---
 ```
 
