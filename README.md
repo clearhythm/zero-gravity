@@ -69,8 +69,11 @@ node cli.cjs generate --input article.md --stamp
 #### CLI Commands
 
 ```bash
-# Generate full JSON + stamp from an article
+# Generate from a local file
 node cli.cjs generate --input article.md --stamp
+
+# Fetch a URL, save the article locally, then generate
+node cli.cjs generate --url https://example.com/article --stamp
 
 # Generate with embedding vector
 node cli.cjs generate --input article.md --embed
@@ -78,6 +81,8 @@ node cli.cjs generate --input article.md --embed
 # Parse an existing stamp from a document
 node cli.cjs parse --input file-with-stamp.md --json
 ```
+
+All output files (fetched articles and `.zg.json`) are written to `./output/`, which is created automatically if it doesn't exist and is gitignored.
 
 _Note: Generation requires an Anthropic API key. Embeddings require an OpenAI API key. Set `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` in a `.env` file._
 
@@ -151,6 +156,7 @@ spec/           Schema and field definitions
 skill/          Portable agent skill for generating stamps
 src/            Parser, generator, embedder
 examples/       Sample stamped documents
+output/         Generated files: fetched articles and .zg.json (gitignored)
 cli.cjs         CLI tool
 ```
 

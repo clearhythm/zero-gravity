@@ -85,10 +85,11 @@ async function generate(anthropic, { text, model = DEFAULT_MODEL }) {
     return { fields: null, raw: '', usage: response.usage };
   }
 
-  // Parse JSON
+  // Parse JSON — strip markdown code fences if present
   let fields;
   try {
-    fields = JSON.parse(raw);
+    const cleaned = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+    fields = JSON.parse(cleaned);
   } catch (e) {
     console.error(`[generator] WARNING: Response is not valid JSON: ${e.message}`);
     return { fields: null, raw, usage: response.usage };

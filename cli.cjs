@@ -5,11 +5,12 @@
  *
  * Usage:
  *   node cli.cjs generate --input article.md                   Generate full JSON from article
+ *   node cli.cjs generate --url https://example.com/article    Fetch URL, save article, then generate
  *   node cli.cjs generate --input article.md --embed           Also generate embedding
  *   node cli.cjs generate --input article.md --stamp           Also output a stamp
  *   node cli.cjs parse --input file-with-stamp.md              Parse stamp from document
  *   node cli.cjs parse --input file-with-stamp.md --json       Output as JSON
- *   node cli.cjs embed --input full.zg.json                    Add embedding to full JSON
+ *   node cli.cjs embed --input output.zg.json                  Add embedding to JSON
  */
 
 const fs = require('fs');
@@ -17,10 +18,17 @@ const path = require('path');
 
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
+const OUTPUT_DIR = path.join(__dirname, 'output');
+
+function ensureOutputDir() {
+  if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+}
+
 function parseArgs(argv) {
   const args = {
     command: null,
     input: null,
+    url: null,
     output: null,
     json: false,
     embed: false,
@@ -35,6 +43,8 @@ function parseArgs(argv) {
     const arg = argv[i];
     if (arg === '--input' && argv[i + 1]) {
       args.input = argv[++i];
+    } else if (arg === '--url' && argv[i + 1]) {
+      args.url = argv[++i];
     } else if (arg === '--output' && argv[i + 1]) {
       args.output = argv[++i];
     } else if (arg === '--json') {
@@ -54,7 +64,7 @@ function parseArgs(argv) {
 
 function readInput(inputPath) {
   if (!inputPath) {
-    console.error('Error: --input <path> is required');
+    console.error('Error: --input <path> or --url <url> is required');
     process.exit(1);
   }
   const resolved = path.resolve(inputPath);
@@ -73,6 +83,49 @@ function writeOutput(outputPath, content) {
   }
   fs.writeFileSync(resolved, content);
   console.error(`Written to: ${resolved}`);
+}
+
+async function fetchFromUrl(url) {
+  const parsed = new URL(url);
+  const segments = parsed.pathname.split('/').filter(Boolean);
+  const slug = segments[segments.length - 1] || 'article';
+
+  const html = await new Promise((resolve, reject) => {
+    const https = require('https');
+    const http = require('http');
+
+    function follow(targetUrl, redirects) {
+      if (redirects > 5) return reject(new Error('Too many redirects'));
+      const mod = targetUrl.startsWith('https') ? https : http;
+      mod.get(targetUrl, { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; ZeroGravity/0.1)' } }, (res) => {
+        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          const next = res.headers.location.startsWith('http')
+            ? res.headers.location
+            : new URL(res.headers.location, targetUrl).href;
+          return follow(next, redirects + 1);
+        }
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => resolve(data));
+      }).on('error', reject);
+    }
+
+    follow(url, 0);
+  });
+
+  // Strip non-content semantic elements before converting
+  const cleaned = html
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<nav[^>]*>[\s\S]*?<\/nav>/gi, '')
+    .replace(/<footer[^>]*>[\s\S]*?<\/footer>/gi, '')
+    .replace(/<aside[^>]*>[\s\S]*?<\/aside>/gi, '');
+
+  const TurndownService = require('turndown');
+  const td = new TurndownService({ headingStyle: 'atx', bulletListMarker: '-' });
+  const text = td.turndown(cleaned);
+
+  return { slug, text };
 }
 
 function getAnthropicClient() {
@@ -98,7 +151,22 @@ function getOpenAIClient() {
 // ─── GENERATE command ────────────────────────────────────────────
 
 async function cmdGenerate(args) {
-  const text = readInput(args.input);
+  let text, slug;
+
+  if (args.url) {
+    console.error(`[zerogravity] Fetching ${args.url}...`);
+    const fetched = await fetchFromUrl(args.url);
+    slug = fetched.slug;
+    text = fetched.text;
+    ensureOutputDir();
+    const savedPath = path.join(OUTPUT_DIR, `${slug}.md`);
+    fs.writeFileSync(savedPath, text);
+    console.error(`[zerogravity] Article saved to: ${savedPath}`);
+  } else {
+    text = readInput(args.input);
+    slug = args.input ? path.basename(args.input, path.extname(args.input)) : null;
+  }
+
   const anthropic = getAnthropicClient();
   const { generate } = require('./src/generator.cjs');
   const { validateFullJSON } = require('./src/parser.cjs');
@@ -142,11 +210,10 @@ async function cmdGenerate(args) {
     embedding: embeddingResult
   });
 
+  const fileSlug = slug || result.fields.id || 'output';
   const jsonStr = JSON.stringify(fullJSON, null, 2);
-  const jsonPath = args.output ||
-    path.join(__dirname, 'data', `${result.fields.id || 'output'}.zg.json`);
-  const jsonDir = path.dirname(path.resolve(jsonPath));
-  if (!fs.existsSync(jsonDir)) fs.mkdirSync(jsonDir, { recursive: true });
+  ensureOutputDir();
+  const jsonPath = args.output || path.join(OUTPUT_DIR, `${fileSlug}.zg.json`);
   writeOutput(jsonPath, jsonStr);
 
   // Output stamp if requested
@@ -272,6 +339,7 @@ function printHelp() {
 
   Generate:
     node cli.cjs generate --input article.md
+    node cli.cjs generate --url https://example.com/article
     node cli.cjs generate --input article.md --embed
     node cli.cjs generate --input article.md --stamp
     node cli.cjs generate --input article.md --stamp --manifest https://example.com/embed.json
@@ -282,7 +350,9 @@ function printHelp() {
     node cli.cjs parse --input file-with-stamp.md --json
 
   Embed:
-    node cli.cjs embed --input full.zg.json --output full-with-embedding.zg.json
+    node cli.cjs embed --input output.zg.json --output output-with-embedding.zg.json
+
+  All output files are written to ./output/ (auto-created, gitignored).
 `);
 }
 
