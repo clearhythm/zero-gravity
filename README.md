@@ -60,21 +60,23 @@ Boom. Done.
 
 If you plan to use Zero Gravity in a research project or generate stamps for an entire blog, this option will save you time.
 
-Just clone this repo, add your API key, and run:
+The CLI has two input modes:
+
+**From a URL** — fetches the page, converts it to markdown, and generates a stamp:
+
+```bash
+node cli.cjs generate --url https://example.com/article --stamp
+```
+
+**From a local file** — generates a stamp from a markdown file you already have:
 
 ```bash
 node cli.cjs generate --input article.md --stamp
 ```
 
-#### CLI Commands
+#### Other commands
 
 ```bash
-# Generate from a local file
-node cli.cjs generate --input article.md --stamp
-
-# Fetch a URL, save the article locally, then generate
-node cli.cjs generate --url https://example.com/article --stamp
-
 # Generate with embedding vector
 node cli.cjs generate --input article.md --embed
 
