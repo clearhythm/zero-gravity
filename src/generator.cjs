@@ -14,7 +14,7 @@ OUTPUT ONLY VALID JSON. No explanations, no commentary, no markdown fences.
 
 - title: Short article title
 - intent: What the article does. MUST be one of: proposal / critique / synthesis / report / design
-- metaindex: Array of 4-8 semantic fragments for vectorization. Each entry should capture one of three things: (1) unique key phrases — distinctive terms that make this article findable in semantic search, (2) argument distillation — core claims as indexable propositions, (3) notable snippets — specific quotes or formulations worth preserving. Mix all three freely. Include the author name as an entry if identifiable.
+- metaindex: Array of 4-8 semantic fragments for vectorization. Each entry should capture one of three things: (1) unique key phrases — distinctive terms that make this article findable in semantic search, (2) argument distillation — core claims as indexable propositions, (3) notable snippets — specific quotes or formulations worth preserving. Mix all three freely.
 
 ## Optional Fields (include when identifiable)
 
@@ -25,7 +25,7 @@ OUTPUT ONLY VALID JSON. No explanations, no commentary, no markdown fences.
 {
   "title": "Zero Gravity — A Semantic Bootstrap for the Agentic Web",
   "intent": "proposal",
-  "metaindex": ["Erik Burns", "semantic bootstrap for agents", "token gravity", "agents need structure not prose", "meaning has bones"],
+  "metaindex": ["semantic bootstrap for agents", "token gravity", "agents need structure not prose", "meaning has bones"],
   "author": "Erik Burns"
 }
 
