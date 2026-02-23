@@ -27,7 +27,7 @@ encoding: "zero-gravity"
 version: "0.1"
 author: "Erik Burns"
 title: "Zero Gravity — A Semantic Bootstrap for the Agentic Web"
-intent: "proposal"
+intent: "Argues that publishers can eliminate redundant agent computation by embedding a lightweight semantic declaration in each article"
 metaindex:
   - "Erik Burns"
   - "semantic bootstrap for agents"
@@ -108,35 +108,26 @@ The stamp lives inside an article — Markdown, HTML, plain text. Agents find it
 
 ### Full JSON (canonical)
 
-The generator produces a full JSON with extended semantic fields. The stamp is derived from a subset. The full JSON includes claims, relevance, stance, tags, relations, and an optional embedding vector.
+The generator produces a full JSON output file (`.zg.json`). The stamp is derived from a subset of these fields.
 
 ```json
 {
   "encoding": "zero-gravity",
   "version": "0.1",
-  "id": "zero-gravity-v01",
-  "author": "Erik Burns",
   "title": "Zero Gravity — A Semantic Bootstrap for the Agentic Web",
-  "intent": "proposal",
-  "relevance": "A meaning skeleton makes content indexable without processing full prose",
-  "claims": [
-    "agents waste tokens on rhetorical glue",
-    "meaning can be represented as claims and relations",
-    "embedding the skeleton produces cleaner vectors than embedding the article"
-  ],
+  "intent": "Argues that publishers can eliminate redundant agent computation by embedding a lightweight semantic declaration in each article",
   "metaindex": [
-    "Erik Burns",
     "semantic bootstrap for agents",
     "token gravity",
     "agents need structure not prose",
     "meaning has bones"
   ],
-  "stance": "exploratory",
-  "tags": ["semantic-compression", "agent-abstracts", "meaning-skeleton"],
-  "relations": ["RAG", "argument-mapping", "structured-data"],
+  "author": "Erik Burns",
+  "created_at": "2026-02-22T00:00:00.000Z",
   "embedding": {
     "model": "text-embedding-3-small",
     "dimensions": 1536,
+    "input_hash": "sha256-of-embedded-text",
     "vector": [0.0123, -0.0456, "..."]
   }
 }
