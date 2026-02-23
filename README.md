@@ -84,7 +84,13 @@ node cli.cjs generate --input article.md --embed
 node cli.cjs parse --input file-with-stamp.md --json
 ```
 
-All output files (fetched articles and `.zg.json`) are written to `./output/`, which is created automatically if it doesn't exist and is gitignored.
+Output is written to `./output/` (auto-created, gitignored):
+
+- `output/{slug}.zg.json` — full JSON with all stamp fields
+- `output/{slug}.stamp.md` — the stamp block, ready to paste into your article
+- `output/raw/{slug}.md` — fetched article markdown (URL mode only)
+
+Add `--stamp` to also print the stamp to stdout.
 
 _Note: Generation requires an Anthropic API key. Embeddings require an OpenAI API key. Set `ANTHROPIC_API_KEY` and `OPENAI_API_KEY` in a `.env` file._
 

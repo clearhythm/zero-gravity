@@ -19,9 +19,11 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 const OUTPUT_DIR = path.join(__dirname, 'output');
+const RAW_DIR = path.join(OUTPUT_DIR, 'raw');
 
-function ensureOutputDir() {
+function ensureOutputDirs() {
   if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+  if (!fs.existsSync(RAW_DIR)) fs.mkdirSync(RAW_DIR, { recursive: true });
 }
 
 function parseArgs(argv) {
@@ -158,8 +160,8 @@ async function cmdGenerate(args) {
     const fetched = await fetchFromUrl(args.url);
     slug = fetched.slug;
     text = fetched.text;
-    ensureOutputDir();
-    const savedPath = path.join(OUTPUT_DIR, `${slug}.md`);
+    ensureOutputDirs();
+    const savedPath = path.join(RAW_DIR, `${slug}.md`);
     fs.writeFileSync(savedPath, text);
     console.error(`[zerogravity] Article saved to: ${savedPath}`);
   } else {
@@ -211,25 +213,30 @@ async function cmdGenerate(args) {
   });
 
   const fileSlug = slug || 'output';
+  ensureOutputDirs();
+
+  // Write full JSON
   const jsonStr = JSON.stringify(fullJSON, null, 2);
-  ensureOutputDir();
   const jsonPath = args.output || path.join(OUTPUT_DIR, `${fileSlug}.zg.json`);
   writeOutput(jsonPath, jsonStr);
 
-  // Output stamp if requested
-  if (args.stamp) {
-    const { formatStampWithHeader } = require('./src/parser.cjs');
-    const { DEFAULT_MODEL } = require('./src/generator.cjs');
-    const stampFields = {
-      author: result.fields.author,
-      title: result.fields.title,
-      intent: result.fields.intent,
-      metaindex: result.fields.metaindex || [],
-      model: DEFAULT_MODEL,
-      manifest: args.manifest || undefined
-    };
+  // Always write stamp file
+  const { formatStampWithHeader } = require('./src/parser.cjs');
+  const { DEFAULT_MODEL } = require('./src/generator.cjs');
+  const stampFields = {
+    author: result.fields.author,
+    title: result.fields.title,
+    intent: result.fields.intent,
+    metaindex: result.fields.metaindex || [],
+    model: DEFAULT_MODEL,
+    manifest: args.manifest || undefined
+  };
+  const stamp = formatStampWithHeader(stampFields);
+  const stampPath = path.join(OUTPUT_DIR, `${fileSlug}.stamp.md`);
+  writeOutput(stampPath, stamp);
 
-    const stamp = formatStampWithHeader(stampFields);
+  // Print stamp to stdout if requested
+  if (args.stamp) {
     console.error('\n[zerogravity] Stamp:\n');
     console.log(stamp);
   }
