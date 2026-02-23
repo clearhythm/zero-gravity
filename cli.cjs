@@ -210,7 +210,7 @@ async function cmdGenerate(args) {
     embedding: embeddingResult
   });
 
-  const fileSlug = slug || result.fields.id || 'output';
+  const fileSlug = slug || 'output';
   const jsonStr = JSON.stringify(fullJSON, null, 2);
   ensureOutputDir();
   const jsonPath = args.output || path.join(OUTPUT_DIR, `${fileSlug}.zg.json`);

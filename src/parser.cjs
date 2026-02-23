@@ -12,11 +12,10 @@ const ZG_BLOCK_REGEX = /---BEGIN ZERO GRAVITY---\n([\s\S]*?)\n---END ZERO GRAVIT
 const STAMP_REQUIRED_FIELDS = ['encoding', 'version', 'title', 'intent', 'metaindex'];
 
 // Full JSON required fields (from generator output)
-const JSON_REQUIRED_FIELDS = ['id', 'intent', 'relevance', 'claims'];
+const JSON_REQUIRED_FIELDS = ['title', 'intent', 'metaindex'];
 
 // Controlled vocabularies
 const VALID_INTENTS = ['proposal', 'critique', 'synthesis', 'report', 'design'];
-const VALID_STANCES = ['speculative', 'empirical', 'prescriptive', 'exploratory'];
 
 /**
  * Extract a data block from text.
@@ -151,20 +150,12 @@ function validateFullJSON(json) {
     errors.push(`Invalid intent value: "${json.intent}". Must be one of: ${VALID_INTENTS.join(', ')}`);
   }
 
-  if (json.stance && !VALID_STANCES.includes(json.stance)) {
-    errors.push(`Invalid stance value: "${json.stance}". Must be one of: ${VALID_STANCES.join(', ')}`);
-  }
-
-  if (Array.isArray(json.claims)) {
-    if (json.claims.length < 3) {
-      errors.push(`claims should have at least 3 items (found ${json.claims.length})`);
-    } else if (json.claims.length > 7) {
-      errors.push(`claims should have at most 7 items (found ${json.claims.length})`);
+  if (Array.isArray(json.metaindex)) {
+    if (json.metaindex.length < 4) {
+      errors.push(`metaindex should have at least 4 items (found ${json.metaindex.length})`);
+    } else if (json.metaindex.length > 8) {
+      errors.push(`metaindex should have at most 8 items (found ${json.metaindex.length})`);
     }
-  }
-
-  if (json.id && !/^[a-z0-9-]+$/.test(json.id)) {
-    errors.push(`id must be lowercase alphanumeric with hyphens: "${json.id}"`);
   }
 
   return { valid: errors.length === 0, errors };
@@ -262,6 +253,5 @@ module.exports = {
   ZG_BLOCK_REGEX,
   STAMP_REQUIRED_FIELDS,
   JSON_REQUIRED_FIELDS,
-  VALID_INTENTS,
-  VALID_STANCES
+  VALID_INTENTS
 };
