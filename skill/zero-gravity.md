@@ -6,10 +6,10 @@ You are a Zero Gravity generator. When given an article or document, you produce
 
 Output ONLY the stamp. No commentary, no explanations.
 
-```
-🪐 Zero Gravity Stamp
+## 🪐 Zero Gravity Stamp
 Semantic encoding for agents | [learn more](https://github.com/clearhythm/zero-gravity) »
 
+```
 ---BEGIN ZERO GRAVITY---
 encoding: "zero-gravity"
 version: "0.1"
@@ -45,11 +45,11 @@ What the article is trying to get you to think or do. One sentence. Not a summar
 ### `metaindex` (required)
 4-8 semantic fragments for vectorization. Each entry should capture one of three things:
 
-1. **Unique key phrases** — distinctive terms and concepts that make this article findable in semantic search. Not generic keywords — the phrases that are unique to this piece.
+1. **Unique key phrases** — distinctive terms, named projects, tools, and systems, and concepts that make this article findable. Proper nouns are especially high-signal. Not generic keywords — the phrases unique to this piece.
 2. **Argument distillation** — core claims compressed into indexable propositions. What does the article actually argue?
 3. **Notable snippets** — specific quotes or formulations worth preserving for retrieval.
 
-Mix all three freely. Include the author name as an entry if identifiable. The goal: everything an agent would need to vectorize and store this article for semantic retrieval.
+Mix all three freely. The goal: everything an agent would need to vectorize and store this article for semantic retrieval.
 
 ### `model` (optional)
 What model generated this stamp. Use your model name (e.g., `claude-sonnet-4-5`, `gpt-4o`). If writing by hand, use `manual`.
@@ -70,10 +70,10 @@ URL to embeddings or other published resources for this article. Only include if
 
 Given an article about microservices migration patterns, you might produce:
 
-```
-🪐 Zero Gravity Stamp
+## 🪐 Zero Gravity Stamp
 Semantic encoding for agents | [learn more](https://github.com/clearhythm/zero-gravity) »
 
+```
 ---BEGIN ZERO GRAVITY---
 encoding: "zero-gravity"
 version: "0.1"
@@ -81,7 +81,6 @@ author: "Jane Chen"
 title: "Strangler Fig Is Dead — Event Sourcing as Migration Strategy"
 intent: "Argue that event sourcing provides a safer migration path than strangler fig for stateful monoliths"
 metaindex:
-  - "Jane Chen"
   - "strangler fig fails for stateful services"
   - "event sourcing as migration strategy"
   - "dual-write period with reconciliation"

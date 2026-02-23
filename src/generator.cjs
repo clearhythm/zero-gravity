@@ -2,34 +2,39 @@
  * Zero Gravity — Generator
  *
  * Takes article text and produces Zero Gravity stamp fields using Claude.
+ * Uses skill/zero-gravity.md as the base prompt — single source of truth
+ * for field definitions. Appends a JSON-output override.
  */
+
+const fs = require('fs');
+const path = require('path');
 
 const DEFAULT_MODEL = 'claude-sonnet-4-5-20250929';
 
-const SYSTEM_PROMPT = `You are a Zero Gravity generator. Your job is to distill an article into a structured semantic abstract.
+const SKILL_PATH = path.join(__dirname, '../skill/zero-gravity.md');
 
-OUTPUT ONLY VALID JSON. No explanations, no commentary, no markdown fences.
+const JSON_OVERRIDE = `
+---
 
-## Required Fields
+For this invocation, output ONLY valid JSON — no stamp format, no markdown fences, no commentary.
 
-- title: Short article title
-- intent: What the article does. MUST be one of: proposal / critique / synthesis / report / design
-- metaindex: Array of 4-8 semantic fragments for vectorization. Each entry should capture one of three things: (1) unique key phrases — distinctive terms that make this article findable in semantic search, (2) argument distillation — core claims as indexable propositions, (3) notable snippets — specific quotes or formulations worth preserving. Mix all three freely.
+Required fields: title, intent, metaindex
+Optional fields: author
 
-## Optional Fields (include when identifiable)
+IMPORTANT: intent MUST be exactly one of: proposal / critique / synthesis / report / design
 
-- author: Author name if identifiable, or the company/website if not
-
-## Example Output
-
+Example:
 {
   "title": "Zero Gravity — A Semantic Bootstrap for the Agentic Web",
   "intent": "proposal",
   "metaindex": ["semantic bootstrap for agents", "token gravity", "agents need structure not prose", "meaning has bones"],
   "author": "Erik Burns"
-}
+}`;
 
-Now distill the provided article.`;
+function buildSystemPrompt() {
+  const skill = fs.readFileSync(SKILL_PATH, 'utf-8');
+  return skill + JSON_OVERRIDE;
+}
 
 /**
  * Generate Zero Gravity fields from article text using Claude.
@@ -44,7 +49,7 @@ async function generate(anthropic, { text, model = DEFAULT_MODEL }) {
   const response = await anthropic.messages.create({
     model,
     max_tokens: 2048,
-    system: SYSTEM_PROMPT,
+    system: buildSystemPrompt(),
     messages: [
       { role: 'user', content: text }
     ]
