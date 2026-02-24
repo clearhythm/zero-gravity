@@ -1,6 +1,6 @@
 # Zero Gravity
 
-A lightweight semantic encoding for AI agents.
+A Lightweight Semantic Encoding Framework for Publishers and AI Agents
 
 ## Why
 
@@ -26,7 +26,7 @@ Semantic encoding for agents | learn more »
 encoding: "zero-gravity"
 version: "0.1"
 author: "Erik Burns"
-title: "Zero Gravity — A Semantic Bootstrap for the Agentic Web"
+title: "Zero Gravity — A Lightweight Semantic Encoding Framework for Publishers and AI Agents"
 intent: "Argues that publishers can eliminate redundant agent computation by embedding a lightweight semantic declaration in each article"
 metaindex:
   - "Erik Burns"
@@ -114,7 +114,7 @@ The generator produces a full JSON output file (`.zg.json`). The stamp is derive
 {
   "encoding": "zero-gravity",
   "version": "0.1",
-  "title": "Zero Gravity — A Semantic Bootstrap for the Agentic Web",
+  "title": "Zero Gravity — A Lightweight Semantic Encoding Framework for Publishers and AI Agents",
   "intent": "Argues that publishers can eliminate redundant agent computation by embedding a lightweight semantic declaration in each article",
   "metaindex": [
     "semantic bootstrap for agents",
@@ -141,7 +141,7 @@ The generator produces a full JSON output file (`.zg.json`). The stamp is derive
   "encoding": "zero-gravity",
   "version": "0.1",
   "author": "Erik Burns",
-  "title": "Zero Gravity — A Semantic Bootstrap for the Agentic Web",
+  "title": "Zero Gravity — A Lightweight Semantic Encoding Framework for Publishers and AI Agents",
   "intent": "Introduce a lightweight semantic declaration layer",
   "metaindex": ["Erik Burns", "semantic bootstrap for agents", "token gravity"]
 }
