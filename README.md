@@ -1,20 +1,20 @@
 # Zero Gravity
 
-A Lightweight Semantic Encoding Framework for Publishers and AI Agents
+A lightweight semantic encoding for the agentic web.
 
 ## Why
 
-Web content is optimized for humans. Prose is great for reading — and incredibly expensive for agents to parse. Every time an agent encounters an article, it does the same work: read the whole thing, figure out what it says, decide if it's relevant, maybe summarize it, maybe embed it. That's tokens. That's compute.
+Every time an agent fetches an article, it does the same work: read the whole thing, figure out what it means, decide if it's relevant, maybe summarize it, maybe embed it. That's tokens. That's compute. And it happens again the next time a different agent hits the same page.
 
-Now multiply that by every agent, every article, every day. The same distillation happening redundantly across millions of agents.
-
-What if the publisher did that work once?
+The fix doesn't require publishers to do anything. Your agent can do it.
 
 ## What
 
-Zero Gravity is a structured semantic abstract that lives inside an article. It declares what the article *means* — its intent, its key claims, its indexable fragments — in a format agents can parse instantly and for free.
+Zero Gravity is a structured semantic abstract — a compact, agent-parseable block that captures what an article means: its intent, its key claims, its indexable fragments. Generate one after fetching content, store it in your knowledge base, and you never have to re-process that article again.
 
-The publisher distills the meaning once. Every agent that encounters the article benefits. Zero redundant compute.
+Fetch once. Stamp it. Query forever.
+
+The stamp is content-absolute, not query-relative. Unlike retrieval tools that return context shaped by your current query, a Zero Gravity stamp represents the article's meaning independently — so it stays useful across every future query, every future agent, every future context.
 
 A Zero Gravity stamp looks like this:
 
@@ -26,7 +26,7 @@ Semantic encoding for agents | learn more »
 encoding: "zero-gravity"
 version: "0.1"
 author: "Erik Burns"
-title: "Zero Gravity — A Lightweight Semantic Encoding Framework for Publishers and AI Agents"
+title: "Zero Gravity — A Semantic Bootstrap for the Agentic Web"
 intent: "Argues that publishers can eliminate redundant agent computation by embedding a lightweight semantic declaration in each article"
 metaindex:
   - "Erik Burns"
@@ -58,7 +58,7 @@ Boom. Done.
 
 ### Option 2: Use the CLI
 
-If you plan to use Zero Gravity in a research project or generate stamps for an entire blog, this option will save you time.
+If you're building a research pipeline or want to stamp a batch of articles, the CLI handles fetching, generation, and embedding.
 
 The CLI has two input modes:
 
@@ -114,7 +114,7 @@ The generator produces a full JSON output file (`.zg.json`). The stamp is derive
 {
   "encoding": "zero-gravity",
   "version": "0.1",
-  "title": "Zero Gravity — A Lightweight Semantic Encoding Framework for Publishers and AI Agents",
+  "title": "Zero Gravity — A Semantic Bootstrap for the Agentic Web",
   "intent": "Argues that publishers can eliminate redundant agent computation by embedding a lightweight semantic declaration in each article",
   "metaindex": [
     "semantic bootstrap for agents",
@@ -141,7 +141,7 @@ The generator produces a full JSON output file (`.zg.json`). The stamp is derive
   "encoding": "zero-gravity",
   "version": "0.1",
   "author": "Erik Burns",
-  "title": "Zero Gravity — A Lightweight Semantic Encoding Framework for Publishers and AI Agents",
+  "title": "Zero Gravity — A Semantic Bootstrap for the Agentic Web",
   "intent": "Introduce a lightweight semantic declaration layer",
   "metaindex": ["Erik Burns", "semantic bootstrap for agents", "token gravity"]
 }
@@ -164,7 +164,7 @@ cli.cjs         CLI tool
 - **Embedding manifests.** The `manifest` field currently points to a single embedding. Future versions could serve a manifest with vectors from multiple providers (OpenAI, Cohere, Voyage, etc.) so agents grab the representation matching their model.
 - **Script tag / sidecar.** Export the stamp as `<script type="application/zero-gravity">` for HTML-native consumption, or as a `.zg.json` sidecar file alongside the article.
 - **Native HTML.** If stamps become a web standard, the format could collapse to native meta elements. The stamp is the bootstrap — a format that works today, inside articles, without waiting for browser vendors.
-- **Discovery.** A registry of Zero Gravity-stamped articles, enabling semantic search across publishers.
+- **Publisher adoption.** If publishers embed stamps at the source, agents benefit without doing any work. A long-term vision — but the format is designed for it.
 
 ## Status
 
